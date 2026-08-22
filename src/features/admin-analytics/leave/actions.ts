@@ -1,5 +1,8 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
+
 import { reviewLeaveRequest } from "@/features/workforce/leave/actions"
 
 /**
@@ -10,18 +13,18 @@ import { reviewLeaveRequest } from "@/features/workforce/leave/actions"
  * state transitions — this wrapper does no additional validation, it only
  * reshapes the submitted fields into LeaveDecisionInput.
  *
- * Errors (not found / already decided / forbidden) are intentionally
- * swallowed here: the row simply re-renders with whatever status the
- * request actually ended up in once the form action's built-in page
- * refresh completes, which keeps this admin-analytics-owned surface small
- * and self-contained.
+ * Failed decisions redirect back with a safe message instead of appearing
+ * to succeed. The workforce action remains the authorization, validation,
+ * and persistence boundary.
  */
 export async function reviewLeaveRequestFormAction(
   formData: FormData,
 ): Promise<void> {
   const leaveRequestId = String(formData.get("leaveRequestId") ?? "")
   const rawDecision = formData.get("decision")
-  const decision = rawDecision === "approved" ? "approved" : "rejected"
+  if (rawDecision !== "approved" && rawDecision !== "rejected") {
+    redirect("/admin/leave?error=Choose+a+valid+leave+decision.")
+  }
   const rawNote = formData.get("note")
   const note =
     typeof rawNote === "string" && rawNote.trim().length > 0
@@ -29,8 +32,18 @@ export async function reviewLeaveRequestFormAction(
       : undefined
 
   if (!leaveRequestId) {
-    return
+    redirect("/admin/leave?error=Leave+request+id+is+missing.")
   }
 
-  await reviewLeaveRequest({ leaveRequestId, decision, note })
+  const result = await reviewLeaveRequest({
+    leaveRequestId,
+    decision: rawDecision,
+    note,
+  })
+
+  if (!result.ok) {
+    redirect(`/admin/leave?error=${encodeURIComponent(result.error.message)}`)
+  }
+
+  revalidatePath("/admin/leave")
 }

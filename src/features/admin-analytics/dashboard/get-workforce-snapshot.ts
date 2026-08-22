@@ -82,16 +82,17 @@ export async function getWorkforceSnapshot(): Promise<
     activeRoster.map((employee) => getAttendance(employee.id, todayRange)),
   )
 
+  const attendanceFailure = attendanceResults.find((result) => !result.ok)
+  if (attendanceFailure && !attendanceFailure.ok) {
+    return attendanceFailure
+  }
+
   let presentToday = 0
   let remoteToday = 0
   let onLeaveToday = 0
 
   for (const result of attendanceResults) {
-    if (!result.ok) {
-      // Do not let one employee's attendance lookup failure sink the whole
-      // dashboard — that employee is simply excluded from today's counts.
-      continue
-    }
+    if (!result.ok) continue
 
     const todaysRecord = result.data.find(
       (record) => record.workDate === today,

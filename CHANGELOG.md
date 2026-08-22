@@ -11,6 +11,9 @@ append-only and use the format: YYYY-MM-DD — description (commit or PR when kn
   shadcn/ui foundation.
 - 2026-08-22 — Added modular team ownership, shared contracts, Supabase SSR/Auth
   plumbing, and secrets-optional build behavior.
+- 2026-08-22 — Hardened final admin integration so failed attendance/payroll
+  reads render errors instead of misleading partial statistics, and failed
+  leave decisions are reported rather than appearing successful.
 
 ### Laptop 2 — Employee experience
 

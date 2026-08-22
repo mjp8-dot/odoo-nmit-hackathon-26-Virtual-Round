@@ -54,8 +54,8 @@ function pickLatest(summaries: PayrollSummary[]): PayrollSummary | null {
  * Loads every employee alongside their most recent payroll record (highest
  * periodEnd), fetched via Promise.all(roster.map(getPayrollSummaries)) —
  * acceptable fan-out at hackathon scale, bounded by the roster page cap
- * above. A per-employee lookup failure degrades that employee to
- * `latest: null` ("No payroll record") rather than failing the whole page.
+ * above. A per-employee lookup failure fails the aggregate so an unavailable
+ * backend record is never presented as "No payroll record".
  */
 export async function getPayrollRoster(): Promise<
   ActionResult<EmployeePayrollRow[]>
@@ -71,6 +71,11 @@ export async function getPayrollRoster(): Promise<
   const summaryResults = await Promise.all(
     roster.map((employee) => getPayrollSummaries(employee.id)),
   )
+
+  const payrollFailure = summaryResults.find((result) => !result.ok)
+  if (payrollFailure && !payrollFailure.ok) {
+    return payrollFailure
+  }
 
   const rows: EmployeePayrollRow[] = roster.map((employee, index) => {
     const result = summaryResults[index]

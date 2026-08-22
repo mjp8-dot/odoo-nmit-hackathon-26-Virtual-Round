@@ -44,14 +44,15 @@ export async function getTodayAttendance(
     roster.map((employee) => getAttendance(employee.id, range)),
   )
 
+  const attendanceFailure = attendanceResults.find((result) => !result.ok)
+  if (attendanceFailure && !attendanceFailure.ok) {
+    return attendanceFailure
+  }
+
   const entries: EmployeeAttendanceRow[] = roster.map((employee, index) => {
     const result = attendanceResults[index]
 
-    // A single employee's attendance lookup failing should not sink the
-    // whole page — that employee just shows as "Not checked in" instead.
-    if (!result.ok) {
-      return { employee, record: null }
-    }
+    if (!result.ok) return { employee, record: null }
 
     const record = result.data.find((r) => r.workDate === date) ?? null
     return { employee, record }

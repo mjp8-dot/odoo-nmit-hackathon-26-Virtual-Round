@@ -404,6 +404,12 @@ export async function getAnalyticsOverview(): Promise<
     Promise.all(roster.map((employee) => getPayrollSummaries(employee.id))),
   ])
 
+  const attendanceFailure = attendanceResults.find((result) => !result.ok)
+  if (attendanceFailure && !attendanceFailure.ok) return attendanceFailure
+
+  const payrollFailure = payrollResults.find((result) => !result.ok)
+  if (payrollFailure && !payrollFailure.ok) return payrollFailure
+
   const attendanceByEmployee = attendanceResults.map((result) =>
     result.ok ? result.data : [],
   )

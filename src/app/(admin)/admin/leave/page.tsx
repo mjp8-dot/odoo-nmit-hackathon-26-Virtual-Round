@@ -25,7 +25,10 @@ const FILTER_LABEL: Record<StatusFilter, string> = {
 }
 
 interface AdminLeavePageProps {
-  searchParams: Promise<{ status?: string | string[] }>
+  searchParams: Promise<{
+    status?: string | string[]
+    error?: string | string[]
+  }>
 }
 
 function firstValue(value: string | string[] | undefined) {
@@ -47,6 +50,7 @@ export default async function AdminLeavePage({
   await requireRole(["hr", "admin"])
 
   const params = await searchParams
+  const reviewError = firstValue(params.error)?.trim()
   const rawStatus = firstValue(params.status)?.trim()
   const statusFilter: StatusFilter =
     rawStatus && isStatusFilter(rawStatus) ? rawStatus : "pending"
@@ -95,6 +99,10 @@ export default async function AdminLeavePage({
           </Button>
         ))}
       </div>
+
+      {reviewError ? (
+        <ErrorState message={reviewError} title="Leave decision was not saved" />
+      ) : null}
 
       {!employeesResult.ok ? (
         <ErrorState
