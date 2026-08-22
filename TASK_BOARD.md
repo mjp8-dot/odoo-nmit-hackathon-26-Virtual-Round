@@ -27,10 +27,10 @@ Each laptop edits only its own section. Laptop 1 moves integrated items to DONE.
 
 | ID | Task | Status | Dependency |
 | --- | --- | --- | --- |
-| L3-001 | Implement documented schema, migrations, seeds, and RLS | TODO | L1-006 |
-| L3-002 | Implement attendance repository and server actions | TODO | L3-001 |
-| L3-003 | Implement leave workflow and approval operations | TODO | L3-001 |
-| L3-004 | Implement payroll read model and visibility rules | TODO | L3-001 |
+| L3-001 | Implement documented schema, migrations, seeds, and RLS | DONE | L1-006 |
+| L3-002 | Implement attendance repository and server actions | DONE | L3-001 |
+| L3-003 | Implement leave workflow and approval operations | DONE | L3-001 |
+| L3-004 | Implement payroll read model and visibility rules | DONE | L3-001 |
 
 ## Laptop 4 — HR and analytics
 

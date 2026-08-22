@@ -58,10 +58,20 @@ input/output models unless an approved contract change is documented.
 | cancelLeaveRequest | LeaveRequest ID | LeaveRequest | Laptop 2 |
 | reviewLeaveRequest | LeaveDecisionInput | LeaveRequest | Laptop 4 |
 | getPayrollSummaries | employee ID plus optional DateRange | PayrollSummary array | Laptops 2 and 4 |
+| getLeaveRequests | scope object with optional employeeId and status | LeaveRequest array | Laptops 2 and 4 |
+| upsertPayrollRecord | employeeId, periodStart, periodEnd, grossPayMinor, deductionsMinor, currency, optional status | PayrollSummary | Laptop 4 |
 
 Laptop 3 decides repository internals, transaction boundaries, and server action
 file layout inside src/features/workforce. It must not return service-role clients
 or privileged database rows to UI modules.
+
+getLeaveRequests is an internal read (src/features/workforce/leave/queries.ts,
+no Route Handler) added additively during implementation: self scope is allowed
+for any authenticated user, all-employees or another employee's scope requires
+hr/admin, enforced with requireUser/requireRole. upsertPayrollRecord
+(src/features/workforce/payroll/actions.ts) is hr/admin only, computes
+netPayMinor server-side, and satisfies the spec's "admin can update salary
+structure" requirement that the original reserved table under-specified.
 
 ## Reserved admin and analytics read contract — Laptop 4
 
