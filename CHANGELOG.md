@@ -57,6 +57,18 @@ append-only and use the format: YYYY-MM-DD — description (commit or PR when kn
 
 ### Laptop 4 — HR and analytics
 
+- 2026-08-22 — Added the admin analytics and deterministic HR insights
+  experience at /admin/analytics, using existing Laptop 3 workforce reads
+  only: getEmployees/listDepartments for workforce distribution,
+  getAttendance for seven-day attendance trends and current remote counts,
+  getLeaveRequests for leave trends/status mix and pending-department
+  insights, and getPayrollSummaries for latest payroll totals/status
+  coverage. Added Recharts-based attendance, leave, department, and work-mode
+  charts (Recharts was already installed), a payroll summary card, reusable
+  deterministic insight presentation, admin navigation entry, and dashboard
+  payroll/insight surfacing. No API, database, auth, or shared contract
+  changes.
+
 - Built the admin leave-approval screen at /admin/leave
   (src/app/(admin)/admin/leave/page.tsx), replacing the placeholder stub.
   Adds src/features/admin-analytics/leave/leave-request-table.tsx (table with

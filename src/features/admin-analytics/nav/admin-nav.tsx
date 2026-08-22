@@ -1,6 +1,7 @@
 "use client"
 
 import {
+  BarChart3,
   CalendarCheck,
   Clock,
   LayoutDashboard,
@@ -18,6 +19,7 @@ const NAV_ITEMS = [
   { href: "/admin/attendance", label: "Attendance", icon: Clock },
   { href: "/admin/leave", label: "Leave requests", icon: CalendarCheck },
   { href: "/admin/payroll", label: "Payroll", icon: Wallet },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
 ] as const
 
 /**

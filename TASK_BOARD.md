@@ -39,10 +39,9 @@ Each laptop edits only its own section. Laptop 1 moves integrated items to DONE.
 | L4-001 | Create admin application shell and navigation | DONE | L1-006 |
 | L4-002 | Build HR dashboard and employee management UI | DONE | L4-001, L3-001 |
 | L4-003 | Build leave approval UI | DONE | L4-001, L3-003 |
-| L4-004 | Build analytics and HR insights | TODO | L4-001, L3 data read models |
+| L4-004 | Build analytics and HR insights | DONE | L4-001, L3 data read models |
 
 ## Integration queue
 
 Add branch, commit hash, checks, contract impact, and reviewer here when work is
 ready. Laptop 1 owns this section to avoid merge churn.
-
